@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { usePopup } from "@/context/PopupsContext";
@@ -8,9 +8,12 @@ import PhoneInput from "react-phone-input-2";
 import useCountryCode from "@/utils/useCountryCode";
 import ButtonArrow from "@/icons/ButtonArrow";
 import { excludedCountries } from "@/utils/countries";
+import ReCaptcha from "react-google-recaptcha";
 
 const RequestForm = () => {
   const countryCode = useCountryCode();
+
+  const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
   const serviceTypes = [
     { value: "Retained HR Support", label: "Retained HR Support" },
@@ -160,6 +163,10 @@ const RequestForm = () => {
     }
   };
 
+  const onCaptchaVerify = (token) => {
+    setIsCaptchaVerified(!!token);
+  };
+
   return (
     <>
       <div className="request-form">
@@ -287,7 +294,7 @@ const RequestForm = () => {
                 />
                 <ErrorMessage name="time" component="div" className="error" />
               </div>
-
+              <ReCaptcha sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY} onChange={onCaptchaVerify} />
               <button
                 type="submit"
                 className={`${isSubmitting ? "loading" : ""} main-button`}
@@ -296,7 +303,6 @@ const RequestForm = () => {
                 <span>Send</span>
                 <ButtonArrow />
               </button>
-
               {status && status.success ? (
                 <div className="thanks-message full">
                   <img src="/images/success.svg" />
