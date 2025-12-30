@@ -5,6 +5,18 @@ const LangSwitcher = () => {
   const [currentLang, setCurrentLang] = useState("EN");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  // Нормалізує код мови для шляху до прапора (незалежно від регістру)
+  const getFlagPath = (langCode) => {
+    if (!langCode) return "EN";
+    const normalized = langCode.toLowerCase();
+    // Для китайської мови залишаємо zh-cn
+    if (normalized === "zh-cn" || normalized === "zh_cn") {
+      return "zh-CN";
+    }
+    // Для інших мов перетворюємо на uppercase
+    return normalized.toUpperCase();
+  };
+
   const handleLanguageChange = (language, languageCode) => {
     const retryDispatchEvent = (attempts = 10) => {
       const select = document.querySelector(".goog-te-combo");
@@ -45,7 +57,7 @@ const LangSwitcher = () => {
         }}
       >
         <img
-          src={`/images/${currentLang}.svg`}
+          src={`/images/${getFlagPath(currentLang)}.svg`}
           style={{
             width: "28px",
           }}
@@ -80,7 +92,7 @@ const LangSwitcher = () => {
             }}
           >
             <img
-              src="/images/EN.svg"
+              src={`/images/${getFlagPath("EN")}.svg`}
               style={{
                 width: "28px",
               }}
@@ -99,7 +111,7 @@ const LangSwitcher = () => {
             }}
           >
             <img
-              src="/images/DE.svg"
+              src={`/images/${getFlagPath("DE")}.svg`}
               style={{
                 width: "28px",
               }}
@@ -118,7 +130,7 @@ const LangSwitcher = () => {
             }}
           >
             <img
-              src="/images/IT.svg"
+              src={`/images/${getFlagPath("IT")}.svg`}
               style={{
                 width: "28px",
               }}
@@ -137,7 +149,7 @@ const LangSwitcher = () => {
             }}
           >
             <img
-              src="/images/zh-CN.svg"
+              src={`/images/${getFlagPath("zh-CN")}.svg`}
               style={{
                 width: "28px",
               }}
